@@ -28,6 +28,9 @@ use Performing\FilterSql\Filter\AndExpression;
 use Performing\FilterSql\Filter\Condition;
 use Performing\FilterSql\Filter\OrExpression;
 use Performing\FilterSql\Filter\ValueExpression;
+use Performing\FilterSql\Parser\Context\BoolContext;
+use Performing\FilterSql\Parser\Context\StringContext;
+use Performing\FilterSql\Parser\Context\IntegerContext;
 
 class FilterSql extends AbstractParseTreeVisitor implements FilterSqlVisitor
 {
@@ -131,11 +134,34 @@ class FilterSql extends AbstractParseTreeVisitor implements FilterSqlVisitor
 
     public function visitValue(ValueContext $context)
     {
-        return new ValueExpression($context->getText());
+        if ($context->string()) {
+            return $this->visit($context->string());
+        } elseif ($context->integer()) {
+            return $this->visit($context->integer());
+        } elseif ($context->decimal()) {
+            return $this->visit($context->decimal());
+        } elseif ($context->bool()) {
+            return $this->visit($context->bool());
+        }
+    }
+
+    public function visitBool(BoolContext $context)
+    {
+        return new ValueExpression((string) (bool) $context->BOOL());
+    }
+
+    public function visitString(StringContext $context)
+    {
+        return new ValueExpression(trim($context->getText(), '\''));
+    }
+
+    public function visitInteger(IntegerContext $context)
+    {
+        return new ValueExpression((string) intval($context->getText()));
     }
 
     public function visitDecimal(DecimalContext $context)
     {
-        return new ValueExpression($context->getText());
+        return new ValueExpression((string) floatval($context->getText()));
     }
 }

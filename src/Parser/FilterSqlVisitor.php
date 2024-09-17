@@ -126,6 +126,33 @@ interface FilterSqlVisitor extends ParseTreeVisitor
 	public function visitValue(Context\ValueContext $context);
 
 	/**
+	 * Visit a parse tree produced by {@see FilterSqlParser::bool()}.
+	 *
+	 * @param Context\BoolContext $context The parse tree.
+	 *
+	 * @return mixed The visitor result.
+	 */
+	public function visitBool(Context\BoolContext $context);
+
+	/**
+	 * Visit a parse tree produced by {@see FilterSqlParser::string()}.
+	 *
+	 * @param Context\StringContext $context The parse tree.
+	 *
+	 * @return mixed The visitor result.
+	 */
+	public function visitString(Context\StringContext $context);
+
+	/**
+	 * Visit a parse tree produced by {@see FilterSqlParser::integer()}.
+	 *
+	 * @param Context\IntegerContext $context The parse tree.
+	 *
+	 * @return mixed The visitor result.
+	 */
+	public function visitInteger(Context\IntegerContext $context);
+
+	/**
 	 * Visit a parse tree produced by {@see FilterSqlParser::decimal()}.
 	 *
 	 * @param Context\DecimalContext $context The parse tree.

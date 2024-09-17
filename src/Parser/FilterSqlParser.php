@@ -32,14 +32,15 @@ namespace Performing\FilterSql\Parser {
 		public const RULE_filter = 0, RULE_expression = 1, RULE_condition = 2, 
                RULE_simpleCompare = 3, RULE_columnCompare = 4, RULE_emptyCompare = 5, 
                RULE_filledCompare = 6, RULE_operator = 7, RULE_value = 8, 
-               RULE_decimal = 9;
+               RULE_bool = 9, RULE_string = 10, RULE_integer = 11, RULE_decimal = 12;
 
 		/**
 		 * @var array<string>
 		 */
 		public const RULE_NAMES = [
 			'filter', 'expression', 'condition', 'simpleCompare', 'columnCompare', 
-			'emptyCompare', 'filledCompare', 'operator', 'value', 'decimal'
+			'emptyCompare', 'filledCompare', 'operator', 'value', 'bool', 'string', 
+			'integer', 'decimal'
 		];
 
 		/**
@@ -62,40 +63,44 @@ namespace Performing\FilterSql\Parser {
 		];
 
 		private const SERIALIZED_ATN =
-			[4, 1, 26, 81, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 
+			[4, 1, 26, 93, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 
 		    7, 4, 2, 5, 7, 5, 2, 6, 7, 6, 2, 7, 7, 7, 2, 8, 7, 8, 2, 9, 7, 9, 
-		    1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 30, 8, 
-		    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 1, 38, 8, 1, 10, 1, 12, 
-		    1, 41, 9, 1, 1, 2, 1, 2, 1, 2, 1, 2, 3, 2, 47, 8, 2, 1, 3, 1, 3, 1, 
-		    3, 1, 3, 1, 4, 1, 4, 1, 4, 1, 4, 1, 5, 1, 5, 1, 5, 1, 5, 1, 6, 1, 
-		    6, 1, 6, 1, 6, 3, 6, 65, 8, 6, 1, 6, 1, 6, 1, 7, 1, 7, 1, 8, 1, 8, 
-		    1, 8, 1, 8, 3, 8, 75, 8, 8, 1, 9, 1, 9, 1, 9, 1, 9, 1, 9, 0, 1, 2, 
-		    10, 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 0, 2, 2, 0, 1, 1, 18, 18, 1, 
-		    0, 1, 10, 80, 0, 20, 1, 0, 0, 0, 2, 29, 1, 0, 0, 0, 4, 46, 1, 0, 0, 
-		    0, 6, 48, 1, 0, 0, 0, 8, 52, 1, 0, 0, 0, 10, 56, 1, 0, 0, 0, 12, 60, 
-		    1, 0, 0, 0, 14, 68, 1, 0, 0, 0, 16, 74, 1, 0, 0, 0, 18, 76, 1, 0, 
-		    0, 0, 20, 21, 3, 2, 1, 0, 21, 22, 5, 0, 0, 1, 22, 1, 1, 0, 0, 0, 23, 
-		    24, 6, 1, -1, 0, 24, 30, 3, 4, 2, 0, 25, 26, 5, 21, 0, 0, 26, 27, 
-		    3, 2, 1, 0, 27, 28, 5, 22, 0, 0, 28, 30, 1, 0, 0, 0, 29, 23, 1, 0, 
-		    0, 0, 29, 25, 1, 0, 0, 0, 30, 39, 1, 0, 0, 0, 31, 32, 10, 2, 0, 0, 
-		    32, 33, 5, 16, 0, 0, 33, 38, 3, 2, 1, 3, 34, 35, 10, 1, 0, 0, 35, 
-		    36, 5, 17, 0, 0, 36, 38, 3, 2, 1, 2, 37, 31, 1, 0, 0, 0, 37, 34, 1, 
-		    0, 0, 0, 38, 41, 1, 0, 0, 0, 39, 37, 1, 0, 0, 0, 39, 40, 1, 0, 0, 
-		    0, 40, 3, 1, 0, 0, 0, 41, 39, 1, 0, 0, 0, 42, 47, 3, 6, 3, 0, 43, 
-		    47, 3, 8, 4, 0, 44, 47, 3, 10, 5, 0, 45, 47, 3, 12, 6, 0, 46, 42, 
-		    1, 0, 0, 0, 46, 43, 1, 0, 0, 0, 46, 44, 1, 0, 0, 0, 46, 45, 1, 0, 
-		    0, 0, 47, 5, 1, 0, 0, 0, 48, 49, 5, 25, 0, 0, 49, 50, 3, 14, 7, 0, 
-		    50, 51, 3, 16, 8, 0, 51, 7, 1, 0, 0, 0, 52, 53, 5, 25, 0, 0, 53, 54, 
-		    3, 14, 7, 0, 54, 55, 5, 25, 0, 0, 55, 9, 1, 0, 0, 0, 56, 57, 5, 25, 
-		    0, 0, 57, 58, 7, 0, 0, 0, 58, 59, 5, 19, 0, 0, 59, 11, 1, 0, 0, 0, 
-		    60, 64, 5, 25, 0, 0, 61, 65, 5, 6, 0, 0, 62, 63, 5, 18, 0, 0, 63, 
-		    65, 5, 20, 0, 0, 64, 61, 1, 0, 0, 0, 64, 62, 1, 0, 0, 0, 65, 66, 1, 
-		    0, 0, 0, 66, 67, 5, 19, 0, 0, 67, 13, 1, 0, 0, 0, 68, 69, 7, 1, 0, 
-		    0, 69, 15, 1, 0, 0, 0, 70, 75, 5, 14, 0, 0, 71, 75, 5, 15, 0, 0, 72, 
-		    75, 5, 23, 0, 0, 73, 75, 3, 18, 9, 0, 74, 70, 1, 0, 0, 0, 74, 71, 
-		    1, 0, 0, 0, 74, 72, 1, 0, 0, 0, 74, 73, 1, 0, 0, 0, 75, 17, 1, 0, 
-		    0, 0, 76, 77, 5, 23, 0, 0, 77, 78, 5, 24, 0, 0, 78, 79, 5, 23, 0, 
-		    0, 79, 19, 1, 0, 0, 0, 6, 29, 37, 39, 46, 64, 74];
+		    2, 10, 7, 10, 2, 11, 7, 11, 2, 12, 7, 12, 1, 0, 1, 0, 1, 0, 1, 1, 
+		    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 36, 8, 1, 1, 1, 1, 1, 1, 1, 1, 
+		    1, 1, 1, 1, 1, 5, 1, 44, 8, 1, 10, 1, 12, 1, 47, 9, 1, 1, 2, 1, 2, 
+		    1, 2, 1, 2, 3, 2, 53, 8, 2, 1, 3, 1, 3, 1, 3, 1, 3, 1, 4, 1, 4, 1, 
+		    4, 1, 4, 1, 5, 1, 5, 1, 5, 1, 5, 1, 6, 1, 6, 1, 6, 1, 6, 3, 6, 71, 
+		    8, 6, 1, 6, 1, 6, 1, 7, 1, 7, 1, 8, 1, 8, 1, 8, 1, 8, 3, 8, 81, 8, 
+		    8, 1, 9, 1, 9, 1, 10, 1, 10, 1, 11, 1, 11, 1, 12, 1, 12, 1, 12, 1, 
+		    12, 1, 12, 0, 1, 2, 13, 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 
+		    24, 0, 2, 2, 0, 1, 1, 18, 18, 1, 0, 1, 10, 89, 0, 26, 1, 0, 0, 0, 
+		    2, 35, 1, 0, 0, 0, 4, 52, 1, 0, 0, 0, 6, 54, 1, 0, 0, 0, 8, 58, 1, 
+		    0, 0, 0, 10, 62, 1, 0, 0, 0, 12, 66, 1, 0, 0, 0, 14, 74, 1, 0, 0, 
+		    0, 16, 80, 1, 0, 0, 0, 18, 82, 1, 0, 0, 0, 20, 84, 1, 0, 0, 0, 22, 
+		    86, 1, 0, 0, 0, 24, 88, 1, 0, 0, 0, 26, 27, 3, 2, 1, 0, 27, 28, 5, 
+		    0, 0, 1, 28, 1, 1, 0, 0, 0, 29, 30, 6, 1, -1, 0, 30, 36, 3, 4, 2, 
+		    0, 31, 32, 5, 21, 0, 0, 32, 33, 3, 2, 1, 0, 33, 34, 5, 22, 0, 0, 34, 
+		    36, 1, 0, 0, 0, 35, 29, 1, 0, 0, 0, 35, 31, 1, 0, 0, 0, 36, 45, 1, 
+		    0, 0, 0, 37, 38, 10, 2, 0, 0, 38, 39, 5, 16, 0, 0, 39, 44, 3, 2, 1, 
+		    3, 40, 41, 10, 1, 0, 0, 41, 42, 5, 17, 0, 0, 42, 44, 3, 2, 1, 2, 43, 
+		    37, 1, 0, 0, 0, 43, 40, 1, 0, 0, 0, 44, 47, 1, 0, 0, 0, 45, 43, 1, 
+		    0, 0, 0, 45, 46, 1, 0, 0, 0, 46, 3, 1, 0, 0, 0, 47, 45, 1, 0, 0, 0, 
+		    48, 53, 3, 6, 3, 0, 49, 53, 3, 8, 4, 0, 50, 53, 3, 10, 5, 0, 51, 53, 
+		    3, 12, 6, 0, 52, 48, 1, 0, 0, 0, 52, 49, 1, 0, 0, 0, 52, 50, 1, 0, 
+		    0, 0, 52, 51, 1, 0, 0, 0, 53, 5, 1, 0, 0, 0, 54, 55, 5, 25, 0, 0, 
+		    55, 56, 3, 14, 7, 0, 56, 57, 3, 16, 8, 0, 57, 7, 1, 0, 0, 0, 58, 59, 
+		    5, 25, 0, 0, 59, 60, 3, 14, 7, 0, 60, 61, 5, 25, 0, 0, 61, 9, 1, 0, 
+		    0, 0, 62, 63, 5, 25, 0, 0, 63, 64, 7, 0, 0, 0, 64, 65, 5, 19, 0, 0, 
+		    65, 11, 1, 0, 0, 0, 66, 70, 5, 25, 0, 0, 67, 71, 5, 6, 0, 0, 68, 69, 
+		    5, 18, 0, 0, 69, 71, 5, 20, 0, 0, 70, 67, 1, 0, 0, 0, 70, 68, 1, 0, 
+		    0, 0, 71, 72, 1, 0, 0, 0, 72, 73, 5, 19, 0, 0, 73, 13, 1, 0, 0, 0, 
+		    74, 75, 7, 1, 0, 0, 75, 15, 1, 0, 0, 0, 76, 81, 3, 18, 9, 0, 77, 81, 
+		    3, 20, 10, 0, 78, 81, 3, 22, 11, 0, 79, 81, 3, 24, 12, 0, 80, 76, 
+		    1, 0, 0, 0, 80, 77, 1, 0, 0, 0, 80, 78, 1, 0, 0, 0, 80, 79, 1, 0, 
+		    0, 0, 81, 17, 1, 0, 0, 0, 82, 83, 5, 14, 0, 0, 83, 19, 1, 0, 0, 0, 
+		    84, 85, 5, 15, 0, 0, 85, 21, 1, 0, 0, 0, 86, 87, 5, 23, 0, 0, 87, 
+		    23, 1, 0, 0, 0, 88, 89, 5, 23, 0, 0, 89, 90, 5, 24, 0, 0, 90, 91, 
+		    5, 23, 0, 0, 91, 25, 1, 0, 0, 0, 6, 35, 43, 45, 52, 70, 80];
 		protected static $atn;
 		protected static $decisionToDFA;
 		protected static $sharedContextCache;
@@ -167,9 +172,9 @@ namespace Performing\FilterSql\Parser {
 
 		    try {
 		        $this->enterOuterAlt($localContext, 1);
-		        $this->setState(20);
+		        $this->setState(26);
 		        $this->recursiveExpression(0);
-		        $this->setState(21);
+		        $this->setState(27);
 		        $this->match(self::EOF);
 		    } catch (RecognitionException $exception) {
 		        $localContext->exception = $exception;
@@ -204,7 +209,7 @@ namespace Performing\FilterSql\Parser {
 
 			try {
 				$this->enterOuterAlt($localContext, 1);
-				$this->setState(29);
+				$this->setState(35);
 				$this->errorHandler->sync($this);
 
 				switch ($this->input->LA(1)) {
@@ -213,7 +218,7 @@ namespace Performing\FilterSql\Parser {
 				    	$this->ctx = $localContext;
 				    	$previousContext = $localContext;
 
-				    	$this->setState(24);
+				    	$this->setState(30);
 				    	$this->condition();
 				    	break;
 
@@ -221,11 +226,11 @@ namespace Performing\FilterSql\Parser {
 				    	$localContext = new Context\ParenthesisExpressionContext($localContext);
 				    	$this->ctx = $localContext;
 				    	$previousContext = $localContext;
-				    	$this->setState(25);
+				    	$this->setState(31);
 				    	$this->match(self::OPEN_PAR);
-				    	$this->setState(26);
+				    	$this->setState(32);
 				    	$this->recursiveExpression(0);
-				    	$this->setState(27);
+				    	$this->setState(33);
 				    	$this->match(self::CLOSE_PAR);
 				    	break;
 
@@ -233,7 +238,7 @@ namespace Performing\FilterSql\Parser {
 					throw new NoViableAltException($this);
 				}
 				$this->ctx->stop = $this->input->LT(-1);
-				$this->setState(39);
+				$this->setState(45);
 				$this->errorHandler->sync($this);
 
 				$alt = $this->getInterpreter()->adaptivePredict($this->input, 2, $this->ctx);
@@ -245,41 +250,41 @@ namespace Performing\FilterSql\Parser {
 						}
 
 						$previousContext = $localContext;
-						$this->setState(37);
+						$this->setState(43);
 						$this->errorHandler->sync($this);
 
 						switch ($this->getInterpreter()->adaptivePredict($this->input, 1, $this->ctx)) {
 							case 1:
 							    $localContext = new Context\AndExpressionContext(new Context\ExpressionContext($parentContext, $parentState));
 							    $this->pushNewRecursionContext($localContext, $startState, self::RULE_expression);
-							    $this->setState(31);
+							    $this->setState(37);
 
 							    if (!($this->precpred($this->ctx, 2))) {
 							        throw new FailedPredicateException($this, "\\\$this->precpred(\\\$this->ctx, 2)");
 							    }
-							    $this->setState(32);
+							    $this->setState(38);
 							    $this->match(self::AND);
-							    $this->setState(33);
+							    $this->setState(39);
 							    $this->recursiveExpression(3);
 							break;
 
 							case 2:
 							    $localContext = new Context\OrExpressionContext(new Context\ExpressionContext($parentContext, $parentState));
 							    $this->pushNewRecursionContext($localContext, $startState, self::RULE_expression);
-							    $this->setState(34);
+							    $this->setState(40);
 
 							    if (!($this->precpred($this->ctx, 1))) {
 							        throw new FailedPredicateException($this, "\\\$this->precpred(\\\$this->ctx, 1)");
 							    }
-							    $this->setState(35);
+							    $this->setState(41);
 							    $this->match(self::OR);
-							    $this->setState(36);
+							    $this->setState(42);
 							    $this->recursiveExpression(2);
 							break;
 						} 
 					}
 
-					$this->setState(41);
+					$this->setState(47);
 					$this->errorHandler->sync($this);
 
 					$alt = $this->getInterpreter()->adaptivePredict($this->input, 2, $this->ctx);
@@ -305,31 +310,31 @@ namespace Performing\FilterSql\Parser {
 		    $this->enterRule($localContext, 4, self::RULE_condition);
 
 		    try {
-		        $this->setState(46);
+		        $this->setState(52);
 		        $this->errorHandler->sync($this);
 
 		        switch ($this->getInterpreter()->adaptivePredict($this->input, 3, $this->ctx)) {
 		        	case 1:
 		        	    $this->enterOuterAlt($localContext, 1);
-		        	    $this->setState(42);
+		        	    $this->setState(48);
 		        	    $this->simpleCompare();
 		        	break;
 
 		        	case 2:
 		        	    $this->enterOuterAlt($localContext, 2);
-		        	    $this->setState(43);
+		        	    $this->setState(49);
 		        	    $this->columnCompare();
 		        	break;
 
 		        	case 3:
 		        	    $this->enterOuterAlt($localContext, 3);
-		        	    $this->setState(44);
+		        	    $this->setState(50);
 		        	    $this->emptyCompare();
 		        	break;
 
 		        	case 4:
 		        	    $this->enterOuterAlt($localContext, 4);
-		        	    $this->setState(45);
+		        	    $this->setState(51);
 		        	    $this->filledCompare();
 		        	break;
 		        }
@@ -355,11 +360,11 @@ namespace Performing\FilterSql\Parser {
 
 		    try {
 		        $this->enterOuterAlt($localContext, 1);
-		        $this->setState(48);
+		        $this->setState(54);
 		        $this->match(self::FIELD);
-		        $this->setState(49);
+		        $this->setState(55);
 		        $this->operator();
-		        $this->setState(50);
+		        $this->setState(56);
 		        $this->value();
 		    } catch (RecognitionException $exception) {
 		        $localContext->exception = $exception;
@@ -383,11 +388,11 @@ namespace Performing\FilterSql\Parser {
 
 		    try {
 		        $this->enterOuterAlt($localContext, 1);
-		        $this->setState(52);
+		        $this->setState(58);
 		        $this->match(self::FIELD);
-		        $this->setState(53);
+		        $this->setState(59);
 		        $this->operator();
-		        $this->setState(54);
+		        $this->setState(60);
 		        $this->match(self::FIELD);
 		    } catch (RecognitionException $exception) {
 		        $localContext->exception = $exception;
@@ -411,9 +416,9 @@ namespace Performing\FilterSql\Parser {
 
 		    try {
 		        $this->enterOuterAlt($localContext, 1);
-		        $this->setState(56);
+		        $this->setState(62);
 		        $this->match(self::FIELD);
-		        $this->setState(57);
+		        $this->setState(63);
 
 		        $_la = $this->input->LA(1);
 
@@ -427,7 +432,7 @@ namespace Performing\FilterSql\Parser {
 		        	$this->errorHandler->reportMatch($this);
 		        	$this->consume();
 		        }
-		        $this->setState(58);
+		        $this->setState(64);
 		        $this->match(self::NULL);
 		    } catch (RecognitionException $exception) {
 		        $localContext->exception = $exception;
@@ -451,28 +456,28 @@ namespace Performing\FilterSql\Parser {
 
 		    try {
 		        $this->enterOuterAlt($localContext, 1);
-		        $this->setState(60);
+		        $this->setState(66);
 		        $this->match(self::FIELD);
-		        $this->setState(64);
+		        $this->setState(70);
 		        $this->errorHandler->sync($this);
 
 		        switch ($this->input->LA(1)) {
 		            case self::NEQ:
-		            	$this->setState(61);
+		            	$this->setState(67);
 		            	$this->match(self::NEQ);
 		            	break;
 
 		            case self::IS:
-		            	$this->setState(62);
+		            	$this->setState(68);
 		            	$this->match(self::IS);
-		            	$this->setState(63);
+		            	$this->setState(69);
 		            	$this->match(self::NOT);
 		            	break;
 
 		        default:
 		        	throw new NoViableAltException($this);
 		        }
-		        $this->setState(66);
+		        $this->setState(72);
 		        $this->match(self::NULL);
 		    } catch (RecognitionException $exception) {
 		        $localContext->exception = $exception;
@@ -496,7 +501,7 @@ namespace Performing\FilterSql\Parser {
 
 		    try {
 		        $this->enterOuterAlt($localContext, 1);
-		        $this->setState(68);
+		        $this->setState(74);
 
 		        $_la = $this->input->LA(1);
 
@@ -532,30 +537,102 @@ namespace Performing\FilterSql\Parser {
 
 		    try {
 		        $this->enterOuterAlt($localContext, 1);
-		        $this->setState(74);
+		        $this->setState(80);
 		        $this->errorHandler->sync($this);
 
 		        switch ($this->getInterpreter()->adaptivePredict($this->input, 5, $this->ctx)) {
 		        	case 1:
-		        	    $this->setState(70);
-		        	    $this->match(self::BOOL);
+		        	    $this->setState(76);
+		        	    $this->bool();
 		        	break;
 
 		        	case 2:
-		        	    $this->setState(71);
-		        	    $this->match(self::STRING);
+		        	    $this->setState(77);
+		        	    $this->string();
 		        	break;
 
 		        	case 3:
-		        	    $this->setState(72);
-		        	    $this->match(self::INT);
+		        	    $this->setState(78);
+		        	    $this->integer();
 		        	break;
 
 		        	case 4:
-		        	    $this->setState(73);
+		        	    $this->setState(79);
 		        	    $this->decimal();
 		        	break;
 		        }
+		    } catch (RecognitionException $exception) {
+		        $localContext->exception = $exception;
+		        $this->errorHandler->reportError($this, $exception);
+		        $this->errorHandler->recover($this, $exception);
+		    } finally {
+		        $this->exitRule();
+		    }
+
+		    return $localContext;
+		}
+
+		/**
+		 * @throws RecognitionException
+		 */
+		public function bool(): Context\BoolContext
+		{
+		    $localContext = new Context\BoolContext($this->ctx, $this->getState());
+
+		    $this->enterRule($localContext, 18, self::RULE_bool);
+
+		    try {
+		        $this->enterOuterAlt($localContext, 1);
+		        $this->setState(82);
+		        $this->match(self::BOOL);
+		    } catch (RecognitionException $exception) {
+		        $localContext->exception = $exception;
+		        $this->errorHandler->reportError($this, $exception);
+		        $this->errorHandler->recover($this, $exception);
+		    } finally {
+		        $this->exitRule();
+		    }
+
+		    return $localContext;
+		}
+
+		/**
+		 * @throws RecognitionException
+		 */
+		public function string(): Context\StringContext
+		{
+		    $localContext = new Context\StringContext($this->ctx, $this->getState());
+
+		    $this->enterRule($localContext, 20, self::RULE_string);
+
+		    try {
+		        $this->enterOuterAlt($localContext, 1);
+		        $this->setState(84);
+		        $this->match(self::STRING);
+		    } catch (RecognitionException $exception) {
+		        $localContext->exception = $exception;
+		        $this->errorHandler->reportError($this, $exception);
+		        $this->errorHandler->recover($this, $exception);
+		    } finally {
+		        $this->exitRule();
+		    }
+
+		    return $localContext;
+		}
+
+		/**
+		 * @throws RecognitionException
+		 */
+		public function integer(): Context\IntegerContext
+		{
+		    $localContext = new Context\IntegerContext($this->ctx, $this->getState());
+
+		    $this->enterRule($localContext, 22, self::RULE_integer);
+
+		    try {
+		        $this->enterOuterAlt($localContext, 1);
+		        $this->setState(86);
+		        $this->match(self::INT);
 		    } catch (RecognitionException $exception) {
 		        $localContext->exception = $exception;
 		        $this->errorHandler->reportError($this, $exception);
@@ -574,15 +651,15 @@ namespace Performing\FilterSql\Parser {
 		{
 		    $localContext = new Context\DecimalContext($this->ctx, $this->getState());
 
-		    $this->enterRule($localContext, 18, self::RULE_decimal);
+		    $this->enterRule($localContext, 24, self::RULE_decimal);
 
 		    try {
 		        $this->enterOuterAlt($localContext, 1);
-		        $this->setState(76);
+		        $this->setState(88);
 		        $this->match(self::INT);
-		        $this->setState(77);
+		        $this->setState(89);
 		        $this->match(self::DOT);
-		        $this->setState(78);
+		        $this->setState(90);
 		        $this->match(self::INT);
 		    } catch (RecognitionException $exception) {
 		        $localContext->exception = $exception;
@@ -1257,19 +1334,19 @@ namespace Performing\FilterSql\Parser\Context {
 		    return FilterSqlParser::RULE_value;
 	    }
 
-	    public function BOOL(): ?TerminalNode
+	    public function bool(): ?BoolContext
 	    {
-	        return $this->getToken(FilterSqlParser::BOOL, 0);
+	    	return $this->getTypedRuleContext(BoolContext::class, 0);
 	    }
 
-	    public function STRING(): ?TerminalNode
+	    public function string(): ?StringContext
 	    {
-	        return $this->getToken(FilterSqlParser::STRING, 0);
+	    	return $this->getTypedRuleContext(StringContext::class, 0);
 	    }
 
-	    public function INT(): ?TerminalNode
+	    public function integer(): ?IntegerContext
 	    {
-	        return $this->getToken(FilterSqlParser::INT, 0);
+	    	return $this->getTypedRuleContext(IntegerContext::class, 0);
 	    }
 
 	    public function decimal(): ?DecimalContext
@@ -1295,6 +1372,129 @@ namespace Performing\FilterSql\Parser\Context {
 		{
 			if ($visitor instanceof FilterSqlVisitor) {
 			    return $visitor->visitValue($this);
+		    }
+
+			return $visitor->visitChildren($this);
+		}
+	} 
+
+	class BoolContext extends ParserRuleContext
+	{
+		public function __construct(?ParserRuleContext $parent, ?int $invokingState = null)
+		{
+			parent::__construct($parent, $invokingState);
+		}
+
+		public function getRuleIndex(): int
+		{
+		    return FilterSqlParser::RULE_bool;
+	    }
+
+	    public function BOOL(): ?TerminalNode
+	    {
+	        return $this->getToken(FilterSqlParser::BOOL, 0);
+	    }
+
+		public function enterRule(ParseTreeListener $listener): void
+		{
+			if ($listener instanceof FilterSqlListener) {
+			    $listener->enterBool($this);
+		    }
+		}
+
+		public function exitRule(ParseTreeListener $listener): void
+		{
+			if ($listener instanceof FilterSqlListener) {
+			    $listener->exitBool($this);
+		    }
+		}
+
+		public function accept(ParseTreeVisitor $visitor): mixed
+		{
+			if ($visitor instanceof FilterSqlVisitor) {
+			    return $visitor->visitBool($this);
+		    }
+
+			return $visitor->visitChildren($this);
+		}
+	} 
+
+	class StringContext extends ParserRuleContext
+	{
+		public function __construct(?ParserRuleContext $parent, ?int $invokingState = null)
+		{
+			parent::__construct($parent, $invokingState);
+		}
+
+		public function getRuleIndex(): int
+		{
+		    return FilterSqlParser::RULE_string;
+	    }
+
+	    public function STRING(): ?TerminalNode
+	    {
+	        return $this->getToken(FilterSqlParser::STRING, 0);
+	    }
+
+		public function enterRule(ParseTreeListener $listener): void
+		{
+			if ($listener instanceof FilterSqlListener) {
+			    $listener->enterString($this);
+		    }
+		}
+
+		public function exitRule(ParseTreeListener $listener): void
+		{
+			if ($listener instanceof FilterSqlListener) {
+			    $listener->exitString($this);
+		    }
+		}
+
+		public function accept(ParseTreeVisitor $visitor): mixed
+		{
+			if ($visitor instanceof FilterSqlVisitor) {
+			    return $visitor->visitString($this);
+		    }
+
+			return $visitor->visitChildren($this);
+		}
+	} 
+
+	class IntegerContext extends ParserRuleContext
+	{
+		public function __construct(?ParserRuleContext $parent, ?int $invokingState = null)
+		{
+			parent::__construct($parent, $invokingState);
+		}
+
+		public function getRuleIndex(): int
+		{
+		    return FilterSqlParser::RULE_integer;
+	    }
+
+	    public function INT(): ?TerminalNode
+	    {
+	        return $this->getToken(FilterSqlParser::INT, 0);
+	    }
+
+		public function enterRule(ParseTreeListener $listener): void
+		{
+			if ($listener instanceof FilterSqlListener) {
+			    $listener->enterInteger($this);
+		    }
+		}
+
+		public function exitRule(ParseTreeListener $listener): void
+		{
+			if ($listener instanceof FilterSqlListener) {
+			    $listener->exitInteger($this);
+		    }
+		}
+
+		public function accept(ParseTreeVisitor $visitor): mixed
+		{
+			if ($visitor instanceof FilterSqlVisitor) {
+			    return $visitor->visitInteger($this);
 		    }
 
 			return $visitor->visitChildren($this);

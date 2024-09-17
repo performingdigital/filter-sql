@@ -20,7 +20,10 @@ emptyCompare: FIELD (EQ | IS) NULL;
 filledCompare: FIELD (NEQ | IS NOT) NULL;
 
 operator: EQ | GT | GTE | LT | LTE | NEQ | LIKE | CONTAINS | STARTSWITH | ENDSWITH;
-value: (BOOL | STRING | INT | decimal);
+value: (bool | string | integer | decimal);
+bool: BOOL;
+string: STRING;
+integer: INT;
 decimal: INT DOT INT;
 
 /*

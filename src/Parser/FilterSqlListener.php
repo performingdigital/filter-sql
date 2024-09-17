@@ -141,6 +141,36 @@ interface FilterSqlListener extends ParseTreeListener {
 	 */
 	public function exitValue(Context\ValueContext $context): void;
 	/**
+	 * Enter a parse tree produced by {@see FilterSqlParser::bool()}.
+	 * @param $context The parse tree.
+	 */
+	public function enterBool(Context\BoolContext $context): void;
+	/**
+	 * Exit a parse tree produced by {@see FilterSqlParser::bool()}.
+	 * @param $context The parse tree.
+	 */
+	public function exitBool(Context\BoolContext $context): void;
+	/**
+	 * Enter a parse tree produced by {@see FilterSqlParser::string()}.
+	 * @param $context The parse tree.
+	 */
+	public function enterString(Context\StringContext $context): void;
+	/**
+	 * Exit a parse tree produced by {@see FilterSqlParser::string()}.
+	 * @param $context The parse tree.
+	 */
+	public function exitString(Context\StringContext $context): void;
+	/**
+	 * Enter a parse tree produced by {@see FilterSqlParser::integer()}.
+	 * @param $context The parse tree.
+	 */
+	public function enterInteger(Context\IntegerContext $context): void;
+	/**
+	 * Exit a parse tree produced by {@see FilterSqlParser::integer()}.
+	 * @param $context The parse tree.
+	 */
+	public function exitInteger(Context\IntegerContext $context): void;
+	/**
 	 * Enter a parse tree produced by {@see FilterSqlParser::decimal()}.
 	 * @param $context The parse tree.
 	 */
