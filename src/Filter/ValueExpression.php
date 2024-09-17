@@ -13,6 +13,6 @@ class ValueExpression implements Expression
 
     public function __toString(): string
     {
-        return "{this->value}";
+        return "{$this->value}";
     }
 }

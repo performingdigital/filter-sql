@@ -95,7 +95,7 @@ class FilterSql extends AbstractParseTreeVisitor implements FilterSqlVisitor
         return new Condition(
             $context->FIELD()->getText(),
             $context->operator()->getText(),
-            $context->value()->getText()
+            $this->visit($context->value())->value
         );
     }
 
@@ -147,7 +147,7 @@ class FilterSql extends AbstractParseTreeVisitor implements FilterSqlVisitor
 
     public function visitBool(BoolContext $context)
     {
-        return new ValueExpression((string) (bool) $context->BOOL());
+        return new ValueExpression((string) $context->BOOL());
     }
 
     public function visitString(StringContext $context)
