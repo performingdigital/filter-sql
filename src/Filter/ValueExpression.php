@@ -4,15 +4,10 @@ declare(strict_types=1);
 
 namespace Performing\FilterSql\Filter;
 
-class ValueExpression implements Expression
+readonly class ValueExpression implements Expression
 {
     public function __construct(
-        public ?string $value,
+        public mixed $value,
     ) {
-    }
-
-    public function __toString(): string
-    {
-        return "{$this->value}";
     }
 }

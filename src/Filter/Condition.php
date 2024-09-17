@@ -9,7 +9,7 @@ readonly final class Condition implements Expression
     public function __construct(
         public string $field1,
         public string $op,
-        public ?string $value,
+        public mixed $value,
         public bool $isColumn = false
     ) {
     }

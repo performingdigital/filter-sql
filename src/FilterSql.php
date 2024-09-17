@@ -147,7 +147,7 @@ class FilterSql extends AbstractParseTreeVisitor implements FilterSqlVisitor
 
     public function visitBool(BoolContext $context)
     {
-        return new ValueExpression((string) $context->BOOL());
+        return new ValueExpression((bool) $context->BOOL());
     }
 
     public function visitString(StringContext $context)
@@ -157,11 +157,11 @@ class FilterSql extends AbstractParseTreeVisitor implements FilterSqlVisitor
 
     public function visitInteger(IntegerContext $context)
     {
-        return new ValueExpression((string) intval($context->getText()));
+        return new ValueExpression(intval($context->getText()));
     }
 
     public function visitDecimal(DecimalContext $context)
     {
-        return new ValueExpression((string) floatval($context->getText()));
+        return new ValueExpression(floatval($context->getText()));
     }
 }
