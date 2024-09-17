@@ -1,0 +1,29 @@
+{
+  "name": "performing/filter-sql",
+  "description": "simple sql like dsl for filtering",
+  "keywords": [
+    "dsl",
+    "sql"
+  ],
+  "homepage": "https://github.com/performingdigital/filter-sql",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Giorgio Pogliani",
+      "email": "giorgiopogliani94@gmail.com",
+      "homepage": "https://performingdigital.com",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": "^8.3",
+    "antlr/antlr4-php-runtime": "^0.9.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "Performing\\FilterSql\\": "src/"
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}
