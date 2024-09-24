@@ -23,11 +23,12 @@ namespace Performing\FilterSql\Parser {
 
 	final class FilterSqlParser extends Parser
 	{
-		public const EQ = 1, GT = 2, GTE = 3, LT = 4, LTE = 5, NEQ = 6, LIKE = 7, 
-               CONTAINS = 8, STARTSWITH = 9, ENDSWITH = 10, STARTS = 11, 
-               ENDS = 12, WITH = 13, BOOL = 14, STRING = 15, AND = 16, OR = 17, 
-               IS = 18, NULL = 19, NOT = 20, OPEN_PAR = 21, CLOSE_PAR = 22, 
-               INT = 23, DOT = 24, FIELD = 25, WS = 26;
+		public const EQ = 1, GT = 2, GTE = 3, LT = 4, LTE = 5, NEQ = 6, NOTLIKE = 7, 
+               LIKE = 8, NOTCONTAINS = 9, CONTAINS = 10, STARTSWITH = 11, 
+               ENDSWITH = 12, STARTS = 13, ENDS = 14, WITH = 15, BOOL = 16, 
+               STRING = 17, AND = 18, OR = 19, IS = 20, NULL = 21, NOT = 22, 
+               OPEN_PAR = 23, CLOSE_PAR = 24, INT = 25, DOT = 26, FIELD = 27, 
+               WS = 28;
 
 		public const RULE_filter = 0, RULE_expression = 1, RULE_condition = 2, 
                RULE_simpleCompare = 3, RULE_columnCompare = 4, RULE_emptyCompare = 5, 
@@ -49,21 +50,21 @@ namespace Performing\FilterSql\Parser {
 		private const LITERAL_NAMES = [
 		    null, "'='", "'>'", "'>='", "'<'", "'<='", null, null, null, null, 
 		    null, null, null, null, null, null, null, null, null, null, null, 
-		    "'('", "')'", null, "'.'"
+		    null, null, "'('", "')'", null, "'.'"
 		];
 
 		/**
 		 * @var array<string>
 		 */
 		private const SYMBOLIC_NAMES = [
-		    null, "EQ", "GT", "GTE", "LT", "LTE", "NEQ", "LIKE", "CONTAINS", "STARTSWITH", 
-		    "ENDSWITH", "STARTS", "ENDS", "WITH", "BOOL", "STRING", "AND", "OR", 
-		    "IS", "NULL", "NOT", "OPEN_PAR", "CLOSE_PAR", "INT", "DOT", "FIELD", 
-		    "WS"
+		    null, "EQ", "GT", "GTE", "LT", "LTE", "NEQ", "NOTLIKE", "LIKE", "NOTCONTAINS", 
+		    "CONTAINS", "STARTSWITH", "ENDSWITH", "STARTS", "ENDS", "WITH", "BOOL", 
+		    "STRING", "AND", "OR", "IS", "NULL", "NOT", "OPEN_PAR", "CLOSE_PAR", 
+		    "INT", "DOT", "FIELD", "WS"
 		];
 
 		private const SERIALIZED_ATN =
-			[4, 1, 26, 93, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 
+			[4, 1, 28, 93, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 
 		    7, 4, 2, 5, 7, 5, 2, 6, 7, 6, 2, 7, 7, 7, 2, 8, 7, 8, 2, 9, 7, 9, 
 		    2, 10, 7, 10, 2, 11, 7, 11, 2, 12, 7, 12, 1, 0, 1, 0, 1, 0, 1, 1, 
 		    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 36, 8, 1, 1, 1, 1, 1, 1, 1, 1, 
@@ -73,34 +74,34 @@ namespace Performing\FilterSql\Parser {
 		    8, 6, 1, 6, 1, 6, 1, 7, 1, 7, 1, 8, 1, 8, 1, 8, 1, 8, 3, 8, 81, 8, 
 		    8, 1, 9, 1, 9, 1, 10, 1, 10, 1, 11, 1, 11, 1, 12, 1, 12, 1, 12, 1, 
 		    12, 1, 12, 0, 1, 2, 13, 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 
-		    24, 0, 2, 2, 0, 1, 1, 18, 18, 1, 0, 1, 10, 89, 0, 26, 1, 0, 0, 0, 
+		    24, 0, 2, 2, 0, 1, 1, 20, 20, 1, 0, 1, 12, 89, 0, 26, 1, 0, 0, 0, 
 		    2, 35, 1, 0, 0, 0, 4, 52, 1, 0, 0, 0, 6, 54, 1, 0, 0, 0, 8, 58, 1, 
 		    0, 0, 0, 10, 62, 1, 0, 0, 0, 12, 66, 1, 0, 0, 0, 14, 74, 1, 0, 0, 
 		    0, 16, 80, 1, 0, 0, 0, 18, 82, 1, 0, 0, 0, 20, 84, 1, 0, 0, 0, 22, 
 		    86, 1, 0, 0, 0, 24, 88, 1, 0, 0, 0, 26, 27, 3, 2, 1, 0, 27, 28, 5, 
 		    0, 0, 1, 28, 1, 1, 0, 0, 0, 29, 30, 6, 1, -1, 0, 30, 36, 3, 4, 2, 
-		    0, 31, 32, 5, 21, 0, 0, 32, 33, 3, 2, 1, 0, 33, 34, 5, 22, 0, 0, 34, 
+		    0, 31, 32, 5, 23, 0, 0, 32, 33, 3, 2, 1, 0, 33, 34, 5, 24, 0, 0, 34, 
 		    36, 1, 0, 0, 0, 35, 29, 1, 0, 0, 0, 35, 31, 1, 0, 0, 0, 36, 45, 1, 
-		    0, 0, 0, 37, 38, 10, 2, 0, 0, 38, 39, 5, 16, 0, 0, 39, 44, 3, 2, 1, 
-		    3, 40, 41, 10, 1, 0, 0, 41, 42, 5, 17, 0, 0, 42, 44, 3, 2, 1, 2, 43, 
+		    0, 0, 0, 37, 38, 10, 2, 0, 0, 38, 39, 5, 18, 0, 0, 39, 44, 3, 2, 1, 
+		    3, 40, 41, 10, 1, 0, 0, 41, 42, 5, 19, 0, 0, 42, 44, 3, 2, 1, 2, 43, 
 		    37, 1, 0, 0, 0, 43, 40, 1, 0, 0, 0, 44, 47, 1, 0, 0, 0, 45, 43, 1, 
 		    0, 0, 0, 45, 46, 1, 0, 0, 0, 46, 3, 1, 0, 0, 0, 47, 45, 1, 0, 0, 0, 
 		    48, 53, 3, 6, 3, 0, 49, 53, 3, 8, 4, 0, 50, 53, 3, 10, 5, 0, 51, 53, 
 		    3, 12, 6, 0, 52, 48, 1, 0, 0, 0, 52, 49, 1, 0, 0, 0, 52, 50, 1, 0, 
-		    0, 0, 52, 51, 1, 0, 0, 0, 53, 5, 1, 0, 0, 0, 54, 55, 5, 25, 0, 0, 
+		    0, 0, 52, 51, 1, 0, 0, 0, 53, 5, 1, 0, 0, 0, 54, 55, 5, 27, 0, 0, 
 		    55, 56, 3, 14, 7, 0, 56, 57, 3, 16, 8, 0, 57, 7, 1, 0, 0, 0, 58, 59, 
-		    5, 25, 0, 0, 59, 60, 3, 14, 7, 0, 60, 61, 5, 25, 0, 0, 61, 9, 1, 0, 
-		    0, 0, 62, 63, 5, 25, 0, 0, 63, 64, 7, 0, 0, 0, 64, 65, 5, 19, 0, 0, 
-		    65, 11, 1, 0, 0, 0, 66, 70, 5, 25, 0, 0, 67, 71, 5, 6, 0, 0, 68, 69, 
-		    5, 18, 0, 0, 69, 71, 5, 20, 0, 0, 70, 67, 1, 0, 0, 0, 70, 68, 1, 0, 
-		    0, 0, 71, 72, 1, 0, 0, 0, 72, 73, 5, 19, 0, 0, 73, 13, 1, 0, 0, 0, 
+		    5, 27, 0, 0, 59, 60, 3, 14, 7, 0, 60, 61, 5, 27, 0, 0, 61, 9, 1, 0, 
+		    0, 0, 62, 63, 5, 27, 0, 0, 63, 64, 7, 0, 0, 0, 64, 65, 5, 21, 0, 0, 
+		    65, 11, 1, 0, 0, 0, 66, 70, 5, 27, 0, 0, 67, 71, 5, 6, 0, 0, 68, 69, 
+		    5, 20, 0, 0, 69, 71, 5, 22, 0, 0, 70, 67, 1, 0, 0, 0, 70, 68, 1, 0, 
+		    0, 0, 71, 72, 1, 0, 0, 0, 72, 73, 5, 21, 0, 0, 73, 13, 1, 0, 0, 0, 
 		    74, 75, 7, 1, 0, 0, 75, 15, 1, 0, 0, 0, 76, 81, 3, 18, 9, 0, 77, 81, 
 		    3, 20, 10, 0, 78, 81, 3, 22, 11, 0, 79, 81, 3, 24, 12, 0, 80, 76, 
 		    1, 0, 0, 0, 80, 77, 1, 0, 0, 0, 80, 78, 1, 0, 0, 0, 80, 79, 1, 0, 
-		    0, 0, 81, 17, 1, 0, 0, 0, 82, 83, 5, 14, 0, 0, 83, 19, 1, 0, 0, 0, 
-		    84, 85, 5, 15, 0, 0, 85, 21, 1, 0, 0, 0, 86, 87, 5, 23, 0, 0, 87, 
-		    23, 1, 0, 0, 0, 88, 89, 5, 23, 0, 0, 89, 90, 5, 24, 0, 0, 90, 91, 
-		    5, 23, 0, 0, 91, 25, 1, 0, 0, 0, 6, 35, 43, 45, 52, 70, 80];
+		    0, 0, 81, 17, 1, 0, 0, 0, 82, 83, 5, 16, 0, 0, 83, 19, 1, 0, 0, 0, 
+		    84, 85, 5, 17, 0, 0, 85, 21, 1, 0, 0, 0, 86, 87, 5, 25, 0, 0, 87, 
+		    23, 1, 0, 0, 0, 88, 89, 5, 25, 0, 0, 89, 90, 5, 26, 0, 0, 90, 91, 
+		    5, 25, 0, 0, 91, 25, 1, 0, 0, 0, 6, 35, 43, 45, 52, 70, 80];
 		protected static $atn;
 		protected static $decisionToDFA;
 		protected static $sharedContextCache;
@@ -505,7 +506,7 @@ namespace Performing\FilterSql\Parser {
 
 		        $_la = $this->input->LA(1);
 
-		        if (!(((($_la) & ~0x3f) === 0 && ((1 << $_la) & 2046) !== 0))) {
+		        if (!(((($_la) & ~0x3f) === 0 && ((1 << $_la) & 8190) !== 0))) {
 		        $this->errorHandler->recoverInline($this);
 		        } else {
 		        	if ($this->input->LA(1) === Token::EOF) {
@@ -1278,9 +1279,19 @@ namespace Performing\FilterSql\Parser\Context {
 	        return $this->getToken(FilterSqlParser::NEQ, 0);
 	    }
 
+	    public function NOTLIKE(): ?TerminalNode
+	    {
+	        return $this->getToken(FilterSqlParser::NOTLIKE, 0);
+	    }
+
 	    public function LIKE(): ?TerminalNode
 	    {
 	        return $this->getToken(FilterSqlParser::LIKE, 0);
+	    }
+
+	    public function NOTCONTAINS(): ?TerminalNode
+	    {
+	        return $this->getToken(FilterSqlParser::NOTCONTAINS, 0);
 	    }
 
 	    public function CONTAINS(): ?TerminalNode

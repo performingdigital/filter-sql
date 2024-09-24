@@ -19,7 +19,7 @@ columnCompare: FIELD operator FIELD;
 emptyCompare: FIELD (EQ | IS) NULL;
 filledCompare: FIELD (NEQ | IS NOT) NULL;
 
-operator: EQ | GT | GTE | LT | LTE | NEQ | LIKE | CONTAINS | STARTSWITH | ENDSWITH;
+operator: EQ | GT | GTE | LT | LTE | NEQ | NOTLIKE | LIKE | NOTCONTAINS | CONTAINS | STARTSWITH | ENDSWITH;
 value: (bool | string | integer | decimal);
 bool: BOOL;
 string: STRING;
@@ -37,7 +37,9 @@ LT: '<';
 LTE: '<=';
 NEQ: ('<>' | '!=');
 
+NOTLIKE: NOT ' '* LIKE;
 LIKE: ('like' | 'LIKE');
+NOTCONTAINS: NOT ' '* CONTAINS; 
 CONTAINS: ('contains' | 'CONTAINS');
 STARTSWITH: STARTS ' '* WITH;
 ENDSWITH: ENDS ' '* WITH;
